@@ -30,4 +30,4 @@ CREATE TABLE students (
 -- id: A unique identifier
 -- name: The name of the cohort
 -- start_date: The cohorts' start date
--- end_date: The cohorts' end date
+-- end_date: The cohorts' end datek
