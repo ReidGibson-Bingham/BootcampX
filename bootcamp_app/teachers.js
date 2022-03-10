@@ -8,19 +8,25 @@ const pool = new Pool({
 });
 
 
-pool.query(`
+
+
+const queryString = `
 SELECT cohorts.name as cohort, teachers.name as teacher 
 FROM assistance_requests
 JOIN teachers ON teachers.id = assistance_requests.teacher_id
 JOIN students ON students.id = assistance_requests.student_id
 JOIN cohorts ON cohorts.id = students.cohort_id
-WHERE cohorts.name LIKE '%${process.argv[2]}%'
-`)
+WHERE cohorts.name LIKE $1
+`;
+
+const cohortName = process.argv[2];
+// Store all potentially malicious values in an array.
+const values = [`%${cohortName}%`];
+
+pool.query(queryString, values)
 .then(res => {
-  res.rows.forEach(row => {
-    console.log(`${row.cohort}: ${row.teacher}`);
-  })
-});
+  console.log("res.rows", res.rows);
+}).catch(err => console.error('query error', err.stack));
 
 // CREATE TABLE students (
 //   id SERIAL PRIMARY KEY NOT NULL,
